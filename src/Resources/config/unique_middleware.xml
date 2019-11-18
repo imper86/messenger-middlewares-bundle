@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="imper86.messenger.middleware.unique"
+                 class="Imper86\MessengerMiddlewaresBundle\Middleware\UniqueMiddleware"
+                 public="false"
+                 autoconfigure="false"
+                 autowire="false">
+            <argument key="$lockRepository" type="service" id="Imper86\MessengerMiddlewaresBundle\Repository\LockRepositoryInterface" />
+        </service>
+
+        <service id="imper86.messenger.event_listener.unique"
+                 class="Imper86\MessengerMiddlewaresBundle\EventListener\UniqueMessageListener"
+                 public="false"
+                 autowire="false"
+                 autoconfigure="false">
+            <argument key="$lockRepository" type="service" id="Imper86\MessengerMiddlewaresBundle\Repository\LockRepositoryInterface" />
+            <tag name="kernel.event_listener"
+                 event="Symfony\Component\Messenger\Event\WorkerMessageHandledEvent"
+                 method="onMessageHandle"
+                 priority="0" />
+        </service>
+    </services>
+</container>
